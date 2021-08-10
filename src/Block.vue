@@ -24,7 +24,6 @@ export default {
         return {
           "data-ref": l.url[1],
           "class": "page-ref",
-          "href": ""
         }
       else
         return {
