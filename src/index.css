@@ -24,7 +24,10 @@ html, body {
   right: 0;
   background: #222;
 }
+#gear { position: fixed; right: 0; }
 #favorites-menu div { padding: .5em; }
 #favorites-menu a { padding: .3em .5em; }
-#favorites-menu .page-ref { color: #ff9580; cursor: pointer; text-decoration: underline; }
+#favorites-menu .page-ref { color: #6fc2ef; cursor: pointer; text-decoration: underline; }
 #favorites-menu .external-link { color: #80ffea; }
+#settings { display: grid; grid-gap: .5em; grid-template-columns: auto auto; }
+#settings label { color: white; }

@@ -19,11 +19,10 @@ function main() {
   logseq.provideUI({
     key: 'show-favorites',
     path: '#head',
-    template: `<a data-on-click="showFavoritesMenu" class="opacity-60 hover:opacity-100">⭐</a>`,
+    template: `<a data-on-click="showFavoritesMenu" oncontextmenu="alert('test')" class="opacity-60 hover:opacity-100">⭐</a>`,
   })
 
   createApp(App).mount('#app');
-  console.warn("main");
 }
 
 // bootstrap

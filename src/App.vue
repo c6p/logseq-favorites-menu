@@ -1,44 +1,50 @@
 <template>
   <div id="wrapper" @click="onClickOutside">
-    <div id="favorites-menu" v-if="ready">
-      <Block v-for="b in blocks" :key="b.id" :data="b" />       
+    <div id="favorites-menu" v-if="visible">
+      <Settings id="settings" v-show="settings" @hideSettings="settings=false"/>
+      <div v-show="!settings">
+        <button id="gear" @click="settings=true">⚙️</button>
+        <Block v-for="b in blocks" :key="b.id" :data="b" @hideMenu="hideMainUI"/>       
+      </div>
     </div>
   </div>  
 </template>
 
 <script>
 import Block from "./Block.vue"
+import Settings from "./Settings.vue"
 
 export default {
   name: 'App',
-  components: {Block},
+  components: {Block, Settings},
   data () {
     return {
-      ready: false,
-      page: "Contents",
+      visible: false,
+      settings: false,
       blocks: []
     }
   },
   mounted () {
     this.updateFavorites()
+    logseq.on('settings:changed', (s) => {
+      this.updateFavorites()
+    })
     logseq.once('ui:visible:changed', ({ visible }) => {
-      visible && (this.ready = true)
+      visible && (this.visible = true)
     })
   },
   methods: {
+    hideMainUI() {
+      this.settings = false;
+      logseq.hideMainUI()
+    },
     onClickOutside ({ target }) {
       const inner = target.closest('#favorites-menu')
-      !inner && logseq.hideMainUI()
+      !inner && this.hideMainUI()
     },
     async updateFavorites () {
-      this.blocks = await logseq.Editor.getPageBlocksTree(this.page);
-      //this.blocks = await logseq.DB.datascriptQuery(`
-      //  [:find (pull ?b [*])
-      //  :where
-      //  [?b :block/page ?p]
-      //  [?p :block/original-name "${this.page}"]]
-      //`);
-      console.log(this.page, this.blocks)
+      const s = logseq.settings;
+      this.blocks = await logseq.Editor.getPageBlocksTree(s.page);
     }
   },
 }

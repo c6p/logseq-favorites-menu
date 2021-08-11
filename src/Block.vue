@@ -3,7 +3,7 @@
     <a v-for="(l,i) in links" :key="i" v-bind="getLinkProps(l)" v-on="getLinkEvents(l)">
         {{ getLinkLabel(l) }}
     </a>  
-    <Block v-for="b in data.children" :key="b.id" :data="b" />
+    <Block v-for="b in data.children" :key="b.id" :data="b" @hideMenu="hideMenu"/>
   </div>
 </template>
 
@@ -17,8 +17,10 @@ export default {
     }
   },
   methods: {
+    hideMenu() {
+      this.$emit('hideMenu');
+    },
     getLinkProps(link) {
-      //console.warn(link)
       const l = link[1];
       if (l.url[0] == "Page_ref") // is page ref?
         return {
@@ -46,7 +48,7 @@ export default {
     },
     pushPage(page) {
       logseq.App.pushState("page", {name: page});
-      logseq.hideMainUI()
+      this.hideMenu()
     }
   }
 }
